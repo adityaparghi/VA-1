@@ -3,12 +3,12 @@ import bg from '../assets/chatgpt.png';
 import { ImEye } from "react-icons/im";
 import { ImEyeBlocked } from "react-icons/im";
 import { useNavigate } from 'react-router-dom';
-import { userDataContext } from '../context/userContext';
+import { userDataContext } from '../context/UserContext.jsx';
 import axios from 'axios';
 
 function SignUp() {
     const [showPassword, setShowPassword] = useState(false);
-   const {serverUrl} = useContext(userDataContext);
+   const {serverUrl, userData,setUserData} = useContext(userDataContext);
     const navigate = useNavigate();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -23,10 +23,13 @@ function SignUp() {
         try {
             let result = await axios.post(`${serverUrl}/api/auth/signup`,{name,email,password},
             {withCredentials: true});
+            setUserData(result.data);
             console.log(result);
             setLoading(false);
+            navigate('/customize');     
         } catch (error) {
             console.log(error);
+            setUserData(null);
             setLoading(false);
             setErr(error.response.data.message)
         }
