@@ -12,6 +12,7 @@ import image9 from '../assets/img10.jpg'
 import { RiImageAiFill } from "react-icons/ri";
 import { userDataContext } from '../context/UserContext'
 import { useNavigate } from 'react-router-dom'
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 
 const Customize = () => {
@@ -25,12 +26,20 @@ const Customize = () => {
   const inputImage = useRef();
   const handleImage = (e) => {
     const file = e.target.files[0];
+
+    if (!file || !file.type.startsWith('image/')) {
+      alert('Please select a valid image file');
+      return;
+    }
+
     setBackendImage(file);
     setFrontendImage(URL.createObjectURL(file));
   }
   return (
     <div className='w-full h-[100vh] bg-gradient-to-t from-black to-[#030353] 
     flex justify-center items-center flex-col p-[20px]'>
+      <IoMdArrowRoundBack className='absolute top-[30px] left-[30px]
+       text-white w-[25px] h-[25px] cursor-pointer ' onClick={() => navigate('/')} />
       <h1 className='text-white mb-[40px] text-[25px] text-center' >Select Your <span
         className='text-blue-300'>Assistant Image</span> </h1>
       <div className='w-full max-w-[60%] flex justify-center items-center flex-wrap gap-[15px]'>
@@ -54,7 +63,7 @@ const Customize = () => {
          {frontendImage && <img src={frontendImage} className='h-full object-cover' />}
         </div>
         
-        <input type='file' accept='image/*' ref={inputImage} hidden onClick={handleImage} ></input>
+        <input type='file' accept='image/*' ref={inputImage} hidden onChange={handleImage} ></input>
       </div>
           {selectedImage && <button className='min-w-[150px] h-[60px] mt-[30px] bg-blue-700 text-white rounded-4xl 
           text-[22px] tracking-tighter: letter-spacing: -0.05em cursor-pointer' onClick={() => navigate('/customize2')}>Next</button> }
